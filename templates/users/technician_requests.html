@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Pending Technician Requests</h2>
+{% for request in requests %}
+    <div class="request">
+        <h3>{{ request.user.username }}</h3>
+        <p>Experience: {{ request.experience }}</p>
+        <p>Qualifications: {{ request.qualifications }}</p>
+        <p>Submitted: {{ request.created_at }}</p>
+        <form method="post" action="{% url 'approve_technician' request.id %}">
+            {% csrf_token %}
+            <button type="submit">Approve</button>
+        </form>
+    </div>
+{% endfor %}
+{% endblock %} 

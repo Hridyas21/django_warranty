@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="text-center text-dark mb-4">Warranty and Repair Management System</h1>
+    
+    {% if user.is_authenticated %}
+        <div class="bg-light p-4 rounded mb-4">
+            <h2>Welcome, {{ user.get_full_name|default:user.username }}</h2>
+            <p class="mb-0">Role: {{ user.get_role_display }}</p>
+        </div>
+
+        <div class="dashboard-section">
+            {% if user.role == 'admin' %}
+                <div class="admin-dashboard">
+                    <h3 class="text-secondary mb-4">Admin Dashboard</h3>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-body">
+                                    <h4 class="card-title">Technician Requests</h4>
+                                    <p class="card-text">Manage technician applications</p>
+                                    <a href="{% url 'technician_requests' %}" class="btn btn-primary">View Requests</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-body">
+                                    <h4 class="card-title">User Management</h4>
+                                    <p class="card-text">Manage system users</p>
+                                    <a href="{% url 'admin:users_user_changelist' %}" class="btn btn-primary">Manage Users</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            {% elif user.role == 'technician' %}
+                {% if user.is_approved %}
+                    <div class="technician-dashboard">
+                        <h3 class="text-secondary mb-4">Technician Dashboard</h3>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="card h-100 shadow-sm">
+                                    <div class="card-body">
+                                        <h4 class="card-title">My Assignments</h4>
+                                        <p class="card-text">View and manage repair assignments</p>
+                                        <a href="#" class="btn btn-primary">View Assignments</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning text-center p-4">
+                        <h3>Application Under Review</h3>
+                        <p class="mb-0">Your technician application is currently being reviewed. You'll be notified once it's approved.</p>
+                    </div>
+                {% endif %}
+
+            {% else %}  <!-- Customer -->
+                <div class="customer-dashboard">
+                    <h3 class="text-secondary mb-4">Customer Dashboard</h3>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-body">
+                                    <h4 class="card-title">My Repair Requests</h4>
+                                    <p class="card-text">View and track your repair requests</p>
+                                    <a href="#" class="btn btn-primary">View Requests</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-body">
+                                    <h4 class="card-title">New Repair Request</h4>
+                                    <p class="card-text">Submit a new repair request</p>
+                                    <a href="#" class="btn btn-primary">Create Request</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <p class="mb-4">Please log in to access the system.</p>
+            <div class="d-flex gap-3 justify-content-center">
+                <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+                <a href="{% url 'register' %}" class="btn btn-primary">Register</a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %} 
